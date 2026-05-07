@@ -1,0 +1,18 @@
+Writeup solution for stackAttack CTF
+
+---First steps---
+Upon using strings and file in the terminal, there's not much of note. No strcmp, and file tells us its been stripped. 
+
+Opening in ghidra, due to the stripped file we get to the entry point. Navigating to the function in the LEA call just before libc_start_main will take us to main 
+
+---Main function---
+Getting to the main function theres a few things of note, the initialization of the character array to all 0's, the scanf call (notable for its insecurity), and the xors in the for loop 
+
+Looking at the way the stack is setup, the character array resides just before the XOR key on the stack. Following the logic, theres an if statement checking if the xor key is equal to 0x2a, or 42 in decimal
+
+Earlier in the program the XOR key was initializedd to 8, not 42. Meaning we need to change it somehow. This can be done in 1 of 2 ways, the first is with a program like GDB or pwndbg. We can check the function stack, and use: "set {int}0x<memory address> = 0x2a", or knowing the insecurities of scanf, considering the name of the program, overwrite the value on the stack. 
+
+Since the character array is 8 characters, and the value needs to be 42, using python we see chr(42) == '*'. When asked how we break the program, we provide 8 characters of anything, then '*', 
+
+Inputting 'aaaaaaaa*' we get the flag!
+
