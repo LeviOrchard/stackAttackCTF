@@ -1,3 +1,3 @@
 ## Stackattack ctf
-Beginner level CTF  
+Beginner level reverse engineering CTF  
 Hint: the name is important
